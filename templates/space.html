@@ -1,0 +1,113 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>空间</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'CSS/bootstrap.css' %}">
+    <script type="text/javascript" src="{% static 'JS/jquery-1.8.3.min.js' %}"></script>
+    <script>
+        $(function () {
+            $("tbody td:contains('警告')").addClass("bg-danger");
+            $("tbody td:contains('正常')").addClass("bg-success");
+
+            $('.return').click(function () {
+               var url = window.location.host;
+               window.location.href = 'http://'+ url;
+            });
+
+            var Color1;
+            var Color2;
+            $("tbody tr").css({
+                'cursor': 'pointer',
+            }).hover(function () {
+                var color1 = $(this).css('background-color');
+                var color2 = $(this).children().eq(1).css('background-color');
+                Color1 = color1;
+                Color2 = color2;
+                $(this).css('background','#5bc0de');
+                $(this).children().eq(1).css('background','#5bc0de')
+            },function () {
+                $(this).css('background',Color1)
+                $(this).children().eq(1).css('background',Color2)
+            }).click(function(){
+                var task_id = $(this).children().last().text();
+                var url = window.location.href;
+                window.location.href = url+'detail?id='+task_id;
+            })
+        })
+    </script>
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-3"></div>
+            <div class="col-lg-6 Title text-center">
+                <h2>各地点空间情况</h2>
+            </div>
+        </div><br><br>      <!--Title -->
+    <div class="row">
+            <div class="col-md-10"></div>
+            <div class="col-md-2">
+                <button class="btn btn-primary return">返回主页面</button>
+            </div>
+    </div><br>
+
+    <div class="row">
+    <div class="col-md-6">
+        <div class="panel panel-default">
+        <div class="panel-heading text-center" style="font-size: 25px">区县空间</div>
+        <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>地点</th>
+            <th>空间情况</th>
+        </tr>
+        </thead>
+        <tbody>
+            {% for message in messages %}
+                {% if message.LEVELS == '1' %}
+                    <tr>
+                        <td>{{ message.JGMC }}</td>
+                        {% if message.STATUS == 1 %}
+                            <td>警告</td>
+                            {% else %}
+                            <td>正常</td>
+                        {% endif %}
+                        <td style="display: none">{{ message.PID }}</td>
+                    </tr>
+                {% endif %}
+            {% endfor %}
+        </tbody>
+        </table></div></div>       <!--区县空间表 -->
+
+    <div class="col-md-6">
+    <div class="panel panel-default">
+        <div class="panel-heading text-center" style="font-size: 25px">医院空间</div>
+        <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>地点</th>
+            <th>空间情况</th>
+        </tr>
+        </thead>
+        <tbody>
+            {% for message in messages %}
+                {% if message.LEVELS == '2' %}
+                    <tr>
+                        <td>{{ message.JGMC }}</td>
+                        {% if message.STATUS == 1 %}
+                            <td>警告</td>
+                            {% else %}
+                            <td>正常</td>
+                        {% endif %}
+                        <td style="display: none">{{ message.PID }}</td>
+                    </tr>
+                {% endif %}
+            {% endfor %}
+        </tbody>
+        </table> </div> </div>      <!--医院空间表 -->
+    </div>
+    </div>
+</body>
+</html>

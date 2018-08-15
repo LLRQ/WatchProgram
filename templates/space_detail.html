@@ -1,0 +1,83 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>细节</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'CSS/bootstrap.css' %}">
+    <script type="text/javascript" src="{% static 'JS/jquery-3.3.1.js' %}"></script>
+    <script>
+        $(function () {
+            $('.return').click(function () {
+               var url = window.location.host;
+               window.location.href = 'http://'+ url + '/space';
+            });
+
+
+            var $b = $("tbody tr").children().filter(".pro").children().children();
+            for (let i of $b){
+                let val = i.innerText;
+                $(i).css({
+                    'width': val
+                })
+             }
+        })
+    </script>
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-3"></div>
+            <div class="col-lg-6">
+                <h2 style="text-align: center">表空间详情</h2>
+            </div>
+        </div><br><br>
+        <div class="row">
+            <div class="col-md-10"></div>
+            <div class="col-md-2">
+                <button class="btn btn-primary return">返回首页</button>
+            </div>
+        </div><br>
+        <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>PID</th>
+            <th>表空间名</th>
+            <th>STATUS</th>
+            <th>SIZE_USED</th>
+            <th>FREE</th>
+            <th>USED</th>
+            <th>RATE_USED_MAX</th>
+            <th>MAX_USED</th>
+        </tr>
+        </thead>
+        <tbody>
+            {% for message in messages %}
+                <tr>
+                    <td>{{ message.0 }}</td>
+                    <td>{{ message.1 }}</td>
+                    <td>{{ message.2 }}</td>
+                    <td>{{ message.3 }}</td>
+                    <td>{{ message.4 }}</td>
+                    <td>{{ message.5 }}</td>
+                    <td class="pro">
+                        {% if message.6 > 90 %}
+                            <div class="progress">
+                            <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuemin="0"
+                                 aria-valuemax="100" style="min-width: 10%">{{ message.6 }}%</div>
+                            </div>
+                            {% else %}
+                            <div class="progress">
+                            <div class="progress-bar progress-bar-success" role="progressbar" aria-valuemin="0"
+                                 aria-valuemax="100" style="min-width: 10%">{{ message.6 }}%</div>
+                        </div>
+                        {% endif %}
+                    </td>
+                    <td>{{ message.7 }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    </div>
+</body>
+</html>

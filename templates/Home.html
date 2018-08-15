@@ -1,0 +1,130 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="refresh" content="10">    {# 让页面每隔10s自动刷新 #}
+    <title>主页</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'CSS/bootstrap.css' %}">
+    <script type="text/javascript" src="{% static 'JS/vue.js' %}"></script>
+    <style>
+        .thumbnail img{
+            height: 245px;
+            width: 245px;
+            position: absolute;
+        }
+        .thumbnail img.wait{
+            height: 100px;
+            width: 100px;
+            z-index: 20;
+            opacity: 0.8;
+            margin: 77px 77px;
+        }
+        .thumbnail img.Warning{
+            height: 50px;
+            width: 50px;
+            z-index: 20;
+        }
+        .thumbnail{
+            height: 255px;
+            width: 255px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div id="app">
+            <div class="jumbotron text-center">
+                <h1>综合监控系统</h1>
+                <p>红色感叹号代表有情况待处理</p>
+            </div>
+            <div class="col-xs-6 col-md-3">
+                <a :href="link1" class="thumbnail">
+                    <img src="{% static 'images/Log.jpg' %}" alt="日志查询" @click="wait1" :style="{opacity: temp1}">
+                    <img class="wait" src="{% static 'images/wait.gif' %}"  v-show="ok1">
+                    {% if flag1 == False %}
+                        <img src="{% static 'images/gth1.jpg' %}" class="Warning">
+                    {% endif %}
+                </a>
+            </div>
+            <div class="col-xs-6 col-md-3">
+                <a :href="link2" class="thumbnail">
+                    <img src="{% static 'images/Ping.jpg' %}" alt="Ping查询" @click="wait2" :style="{opacity: temp2}">
+                    <img class="wait" src="{% static 'images/wait.gif' %}"  v-show="ok2">
+                    {% if flag2 == False %}
+                        <img src="{% static 'images/gth1.jpg' %}" class="Warning">
+                    {% endif %}
+                </a>
+            </div>
+            <div class="col-xs-6 col-md-3">
+                <a :href="link3" class="thumbnail">
+                    <img src="{% static 'images/space.jpg' %}" alt="空间查询" @click="wait3" :style="{opacity: temp3}">
+                    <img class="wait" src="{% static 'images/wait.gif' %}"  v-show="ok3">
+                    {% if flag3 == False %}
+                        <img src="{% static 'images/gth1.jpg' %}" class="Warning">
+                    {% endif %}
+                </a>
+            </div>
+            <div class="col-xs-6 col-md-3">
+                <a :href="link4" class="thumbnail">
+                    <img src="{% static 'images/disk.jpg' %}" alt="磁盘查询" @click="wait4" :style="{opacity: temp4}">
+                    <img class="wait" src="{% static 'images/wait.gif' %}"  v-show="ok4">
+                    {% if flag4 == False %}
+                        <img src="{% static 'images/gth1.jpg' %}" class="Warning">
+                    {% endif %}
+                </a>
+            </div>
+{#            <p><button @click="link1">日志查询</button></p>#}
+{#            <p><button @click="link2">Ping查询</button></p>#}
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        const url = window.location.href;
+        new Vue({
+            el: '#app',
+            data: {
+                link1: url + 'info/',
+                link2: url + 'ping/',
+                link3: url + 'space/',
+                link4: url + 'disc/',
+                ok1: false,
+                ok2: false,
+                ok3: false,
+                ok4: false,
+                temp1: 1,
+                temp2: 1,
+                temp3: 1,
+                temp4: 1
+            },
+            methods: {
+                wait1(){
+                    this.ok1 = true;
+                    this.temp1 = 0.3
+                },
+                wait2(){
+                    this.ok2 = true;
+                    this.temp2 = 0.3
+                },
+                wait3(){
+                    this.ok3 = true;
+                    this.temp3 = 0.3
+                },
+                wait4(){
+                    this.ok4 = true;
+                    this.temp4 = 0.3
+                },
+            },
+            {#mounted(){#}
+            {#    this.intervalID = setInterval(() => {#}
+            {#        window.location.reload()#}
+            {#    }, 10000)#}
+            {# },#}
+            {#beforeDestroy(){        //死亡之前调用一次#}
+            {#    clearInterval(this.intervalID)#}
+            {# },#}
+
+        })
+    </script>
+</body>
+</html>

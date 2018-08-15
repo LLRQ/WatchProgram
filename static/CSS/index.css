@@ -1,0 +1,13 @@
+.Title{
+    text-align: center;
+}
+
+#sp{
+    height: 34px;
+    vertical-align: center;
+    line-height: 34px;
+}
+table.table th,td{
+    text-align: center;
+}
+

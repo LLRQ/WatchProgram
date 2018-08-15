@@ -1,0 +1,77 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Ping情况</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'CSS/bootstrap.css' %}">
+    <script type="text/javascript" src="{% static 'JS/jquery-1.8.3.min.js' %}"></script>
+    <script>
+        $(function () {
+            $("tbody td:contains('失败')").addClass("bg-danger");
+            $("tbody td:contains('通畅')").addClass("bg-success");
+        })
+    </script>
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-3"></div>
+            <div class="col-lg-6 Title text-center">
+                <h2>各地点连接情况</h2>
+            </div>
+        </div><br><br>      <!--Title -->
+
+    <div class="row">
+    <div class="col-md-6">
+        <div class="panel panel-default">
+        <div class="panel-heading text-center" style="font-size: 25px">区县连接表</div>
+        <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>地点</th>
+            <th>连接结果</th>
+            <th>FTP连接结果</th>
+        </tr>
+        </thead>
+        <tbody>
+            {% for message in messages %}
+                {% if message.LEVELS == '1' %}
+                    <tr>
+                        <td>{{ message.JGMC }}</td>
+                        <td>{{ message.IP_ADDRESS }}</td>
+                        <td>{{ message.DB_PORT }}</td>
+                    </tr>
+                {% endif %}
+            {% endfor %}
+        </tbody>
+        </table></div></div>       <!--区县Ping表 -->
+
+    <div class="col-md-6">
+    <div class="panel panel-default">
+        <div class="panel-heading text-center" style="font-size: 25px">医院连接表</div>
+        <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>地点</th>
+            <th>连接结果</th>
+            <th>FTP连接结果</th>
+        </tr>
+        </thead>
+        <tbody>
+            {% for message in messages %}
+                {% if message.LEVELS == '2' %}
+                    <tr>
+                        <td>{{ message.JGMC }}</td>
+                        <td>{{ message.IP_ADDRESS }}</td>
+                        <td>{{ message.DB_PORT }}</td>
+                    </tr>
+                {% endif %}
+            {% endfor %}
+        </tbody>
+        </table> </div> </div>      <!--医院Ping表 -->
+    </div>
+    </div>
+
+</body>
+</html>

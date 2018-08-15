@@ -1,0 +1,55 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>详情信息</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'CSS/bootstrap.css' %}">
+    <script type="text/javascript" src="{% static 'JS/jquery-3.3.1.js' %}"></script>
+    <script type="text/javascript" src="{% static 'JS/bootstrap.min.js' %}"></script>
+    <script>
+        $(function () {
+            $('.return').click(function () {
+               var url = window.location.host;
+               window.location.href = 'http://'+ url + '/info';
+            });
+        })
+    </script>
+</head>
+<body>
+     <div class="container">
+        <div class="row">
+            <div class="col-lg-3"></div>
+            <div class="col-lg-6">
+                <h2 style="text-align: center">正在执行详情</h2>
+            </div>
+        </div><br><br>
+        <div class="row">
+            <div class="col-md-10"></div>
+            <div class="col-md-2">
+                <button class="btn btn-primary return">返回首页</button>
+            </div>
+        </div><br>
+        <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>runno</th>
+            <th>prclognote</th>
+            <th>objnote</th>
+            <th>records</th>
+        </tr>
+        </thead>
+        <tbody>
+            {% for message in messages %}
+                <tr>
+                    <td>{{ message.0 }}</td>
+                    <td>{{ message.1 }}</td>
+                    <td>{{ message.2 }}</td>
+                    <td>{{ message.3 }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    </div>
+</body>
+</html>

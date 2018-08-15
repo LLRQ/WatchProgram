@@ -1,0 +1,168 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>日志查询系统</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'CSS/bootstrap.css' %}">
+    <link rel="stylesheet"  type="text/css" href="{% static 'CSS/index.css' %}">
+    <link rel="stylesheet"  type="text/css" href="{% static 'CSS/bootstrap-datepicker3.css' %}">
+    <script type="text/javascript" src="{% static 'JS/jquery-3.3.1.js' %}"></script>
+    <script type="text/javascript" src="{% static 'JS/bootstrap.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'JS/bootstrap-datepicker.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'JS/bootstrap-datepicker.zh-CN.min.js' %}"></script>
+    <script>
+        $(function () {
+            //时间选择
+            $('#sandbox-container input').datepicker({
+                language: "zh-CN",
+                weekStart: 1,
+                autoclose: true,
+                format: 'yyyy-mm-dd',
+                keyboardNavigation: true,
+                todayHighlight: true,
+                endDate: new Date(),
+            });
+
+            $('.form-control').change(function () {
+                $('form').submit()
+            });
+
+            $('button.today').click(function () {
+                $('form').submit()
+            });
+
+            $('button.home').click(function () {
+                var url = window.location.host;
+                window.location.href = 'http://'+ url
+            });
+
+            var Color;   //高亮显示有数据模块
+            $(".tb tr:not(:contains('无数据'))").css({
+                'cursor': 'pointer',
+            }).hover(function () {
+                var color = $(this).css('background-color');
+                Color = color;
+                $(this).css('background','#5bc0de')
+            },function () {
+                $(this).css('background',Color)
+            }).click(function () {
+                var task_id = $(this).children().last().text();
+                var Note = $(this).children().eq(3).text();
+                var flag = $(this).children().eq(2).text();
+                var url = window.location.href;
+                if (flag === '执行失败！')
+                    window.location.href = url+'error?id='+task_id+'&note='+Note+'&flag='+flag;
+                else
+                    window.location.href = url+'doing?id='+task_id+'&note='+Note+'&flag='+flag;
+            });
+        });
+    </script>
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-3"></div>
+            <div class="col-lg-6 Title">
+                {% if date == None or date == ''%}
+                    <h2>{{ today }}(今天)问题情况</h2>
+                    {% else %}
+                    <h2>{{ date }}问题情况</h2>
+                {% endif %}
+            </div>
+        </div><br><br>      <!--Title -->
+        <div class="row">
+            <div class="col-md-3"></div>
+            <div class="col-md-2 text-right">
+                <label id="sp">选择查看的日期:</label>
+            </div>
+            <form method="post">
+                {% csrf_token %}
+                <div class="col-md-2" id="sandbox-container">
+                    <input type="text" class="form-control" name="date" readonly>
+                </div>
+                <div class="col-md-2 text-center">
+                    <button class="btn btn-primary today">查看今天</button>
+                </div>
+            </form>
+            <div class="col-md-2">
+                    <button class="btn btn-primary home">返回首页</button>
+            </div>
+        </div>              <!--日期选择 -->
+    <br>
+        <div class="panel panel-default">
+        <div class="panel-heading text-center" style="font-size: 25px">区县表</div>
+        <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>序号</th>
+            <th>情况位置</th>
+            <th>问题</th>
+            <th>NOTE</th>
+        </tr>
+        </thead>
+        <tbody class="tb">
+            {% for message1 in messages1 %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ message1.1 }}</td>
+                    {% if message1.4 == 2 %}
+                        <td>执行失败！</td>
+                        {% elif message1.2 == null and message1.3 == null %}
+                        <td>还未执行！</td>
+                        {% elif message1.2 != null and message1.3 == null %}
+                        <td>正在执行！</td>
+                        {% else %}
+                        <td>未知错误！</td>
+                    {% endif %}
+                    {% if message1.0 == null %}
+                        <td>无数据</td>
+                        {% else %}
+                            <td>{{ message1.0 }}</td>
+                    {% endif %}
+                    <td style="display: none">{{ message1.5 }}</td>
+                </tr>
+            {% endfor %}
+
+        </tbody>
+        </table> </div>       <!--区县数据表 -->
+
+    <div class="panel panel-default">
+        <div class="panel-heading text-center" style="font-size: 25px">医院表</div>
+        <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>序号</th>
+            <th>情况位置</th>
+            <th>问题</th>
+            <th>NOTE</th>
+        </tr>
+        </thead>
+        <tbody class="tb">
+            {% for message2 in messages2 %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ message2.1 }}</td>
+                    {% if message2.4 == 2 %}
+                        <td>执行失败！</td>
+                        {% elif message2.2 == null and message2.3 == null %}
+                        <td>还未执行！</td>
+                        {% elif message2.2 != null and message2.3 == null %}
+                        <td>正在执行！</td>
+                        {% else %}
+                        <td>未知错误！</td>
+                    {% endif %}
+                    {% if message2.0 == null %}
+                        <td>无数据</td>
+                        {% else %}
+                            <td>{{ message2.0 }}</td>
+                    {% endif %}
+                    <td style="display: none">{{ message2.5 }}</td>
+                </tr>
+            {% endfor %}
+
+        </tbody>
+        </table> </div>       <!--医院数据表 -->
+    </div>
+</body>
+</html>

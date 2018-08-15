@@ -1,0 +1,147 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>磁盘情况</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'CSS/bootstrap.css' %}">
+    <script type="text/javascript" src="{% static 'JS/jquery-3.3.1.js' %}"></script>
+    <script>
+        $(function () {
+
+            $('.return').click(function () {
+               var url = window.location.host;
+               window.location.href = 'http://'+ url;
+            });
+
+            var $b = $("tbody tr").children().filter(".pro").children().children();
+            for (let i of $b){
+                let val = i.innerText;
+                $(i).css({
+                    'width': val
+                })
+             }
+
+
+            $(".re_top").hide();
+            $(window).scroll(function () {
+                if ($(window).scrollTop() > 100){
+                $(".re_top").fadeIn(500)
+            }else {
+                $(".re_top").fadeOut(500);
+            }
+            });
+
+            $('.re_top').click(function() {
+                $('body,html').animate({
+                scrollTop: '0px'
+            }, 500);
+        });
+        })
+    </script>
+</head>
+<body>
+    <div class="re_top btn btn-info" style="position: fixed;right: 100px;bottom: 100px"><span class="glyphicon glyphicon-chevron-up"></span></div>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-3"></div>
+            <div class="col-lg-6">
+                <h2 style="text-align: center">磁盘空间详情</h2>
+            </div>
+        </div><br><br>
+        <div class="row">
+            <div class="col-md-10"></div>
+            <div class="col-md-2">
+                <button class="btn btn-primary return">返回主页</button>
+            </div>
+        </div><br>
+        <div class="panel panel-default">
+        <div class="panel-heading text-center" style="font-size: 25px">区县磁盘空间表</div>
+        <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>地点</th>
+            <th>Filesystem</th>
+            <th>K_Blocks</th>
+            <th>Used</th>
+            <th>Available</th>
+            <th>Rate_used</th>
+            <th>Mounted_on</th>
+        </tr>
+        </thead>
+        <tbody>
+            {% for message in messages %}
+                {% if message.LEVELS == '1' %}
+                    <tr>
+                        <td>{{ message.JGMC }}</td>
+                        <td>{{ message.FILESYSTEM }}</td>
+                        <td>{{ message.K_BLOCKS }}</td>
+                        <td>{{ message.USED }}</td>
+                        <td>{{ message.AVAILABLE }}</td>
+                        <td class="pro">
+                        {% if message.RATE_USED > '90' %}
+                            <div class="progress">
+                            <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuemin="0"
+                                 aria-valuemax="100" style="min-width: 10%">{{ message.RATE_USED }}%</div>
+                            </div>
+                            {% else %}
+                            <div class="progress">
+                            <div class="progress-bar progress-bar-success" role="progressbar" aria-valuemin="0"
+                                 aria-valuemax="100" style="min-width: 10%">{{ message.RATE_USED }}%</div>
+                        </div>
+                        {% endif %}
+                        </td>
+                        <td>{{ message.MOUNTED_ON }}</td>
+                    </tr>
+                {% endif %}
+            {% endfor %}
+
+        </tbody>
+        </table> </div>       <!--区县磁盘空间表 -->
+    <br>
+    <div class="panel panel-default">
+    <div class="panel-heading text-center" style="font-size: 25px">医院磁盘空间表</div>
+        <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>地点</th>
+            <th>Filesystem</th>
+            <th>K_Blocks</th>
+            <th>Used</th>
+            <th>Available</th>
+            <th>Rate_used</th>
+            <th>Mounted_on</th>
+        </tr>
+        </thead>
+        <tbody>
+            {% for message in messages %}
+                {% if message.LEVELS == '2' %}
+                    <tr>
+                        <td>{{ message.JGMC }}</td>
+                        <td>{{ message.FILESYSTEM }}</td>
+                        <td>{{ message.K_BLOCKS }}</td>
+                        <td>{{ message.USED }}</td>
+                        <td>{{ message.AVAILABLE }}</td>
+                        <td class="pro">
+                        {% if message.RATE_USED > '90' %}
+                            <div class="progress">
+                            <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuemin="0"
+                                 aria-valuemax="100" style="min-width: 10%">{{ message.RATE_USED }}%</div>
+                            </div>
+                            {% else %}
+                            <div class="progress">
+                            <div class="progress-bar progress-bar-success" role="progressbar" aria-valuemin="0"
+                                 aria-valuemax="100" style="min-width: 10%">{{ message.RATE_USED }}%</div>
+                        </div>
+                        {% endif %}
+                        </td>
+                        <td>{{ message.MOUNTED_ON }}</td>
+                    </tr>
+                {% endif %}
+            {% endfor %}
+
+        </tbody>
+        </table> </div>       <!--医院磁盘空间表 -->
+    </div>
+</body>
+</html>
